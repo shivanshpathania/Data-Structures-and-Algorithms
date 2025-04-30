@@ -1,0 +1,45 @@
+// java 
+
+Brute force solution
+
+
+
+
+// User function Template for Java
+
+// class Node
+// {
+//     int data;
+//     Node left, right;
+
+//     public Node(int d)
+//     {
+//         data = d;
+//         left = right = null;
+//     }
+// }
+
+class Solution {
+
+    static boolean isValidBst(Node root,long min,long max){
+        if(root == null)return true;
+        if(root.data >= max || root.data <=min)return false;
+        return isValidBst(root.left,min,root.data) && isValidBst(root.right,root.data,max);
+    }
+    static int noOfNodes(Node root){
+        if(root == null)return 0;
+        return 1 + noOfNodes(root.left) + noOfNodes(root.right);
+    }
+    static int largestBst(Node root) {
+        if(root == null) return 0;
+        
+        int maxBST = 0;
+        
+       if(isValidBst(root,Integer.MIN_VALUE,Integer.MAX_VALUE)){
+           return noOfNodes(root);
+       }
+       return Math.max(largestBst(root.left),largestBst(root.right));
+        
+        
+    }
+}
