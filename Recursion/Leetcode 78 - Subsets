@@ -1,0 +1,19 @@
+// java 
+
+class Solution {
+    static void generatePowerSet(int idx , int [] nums ,List<List<Integer>> result,List<Integer>ans){
+        if(idx==nums.length){
+            result.add(new ArrayList<>(ans));
+            return;
+        }
+        generatePowerSet(idx+1,nums,result,ans);// not take
+        ans.add(nums[idx]);
+        generatePowerSet(idx+1,nums,result,ans);//take
+        ans.remove(ans.size()-1);
+    }
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        generatePowerSet(0,nums,result,new ArrayList<>());
+        return result;
+    }
+}
