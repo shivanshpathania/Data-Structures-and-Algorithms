@@ -1,0 +1,40 @@
+class Solution {
+    public int f(int i,int j,int n,int m,int maxMove,int MOD,int [][][] dp){
+        if(i < 0 || j < 0 ||  i >= n  || j >= m)return 1;
+        if (maxMove == 0) return 0;
+
+        if(dp[i][j][maxMove]!=-1)return dp[i][j][maxMove];
+
+        int left = f(i,j-1,n,m,maxMove-1,MOD,dp) % MOD;
+        int right = f(i,j+1,n,m,maxMove-1,MOD,dp) % MOD;
+        int down = f(i+1,j,n,m,maxMove-1,MOD,dp) % MOD;
+        int up = f(i-1,j,n,m,maxMove-1,MOD,dp) % MOD;
+
+        return  dp[i][j][maxMove] = ((left + right) % MOD + (down + up) % MOD) % MOD;
+    }
+    public int findPaths(int row, int col, int maxMove, int startRow, int startColumn) {
+        int MOD = 1000000007;
+        int [][][] dp = new int [row][col][maxMove+1];
+        // for(int [][] twoD : dp){
+        //     for(int [] ro : twoD){
+        //         Arrays.fill(ro,-1);
+        //     }
+        // }
+        // return f(startRow,startColumn,row,col,maxMove,MOD,dp);
+
+        for(int move = 1; move <= maxMove;move++){
+            for(int i = 0;i<row;i++){
+                for(int j = 0;j<col;j++){
+
+                    int left = (j-1 >= 0) ? dp[i][j-1][move-1] % MOD  : 1 ;
+                    int right = (j+1 < col) ? dp[i][j+1][move-1] % MOD : 1 ;
+                    int down = ( i+1 < row) ? dp[i+1][j][move-1] % MOD : 1 ;
+                    int up = (i-1 >= 0) ? dp[i-1][j][move-1] % MOD : 1;
+
+                    dp[i][j][move] = ((left + right) % MOD + (down + up) % MOD) % MOD;
+                }
+            }
+        }
+        return dp[startRow][startColumn][maxMove] % MOD;
+    }
+}
