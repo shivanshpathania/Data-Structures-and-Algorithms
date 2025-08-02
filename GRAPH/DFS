@@ -1,0 +1,24 @@
+class Solution {
+    public void f_dfs(int start ,boolean [] visited,List<Integer> list,ArrayList<ArrayList<Integer>> adj){
+        
+        visited[start] = true;
+        list.add(start);
+        
+        for(int it : adj.get(start)){
+            if(!visited[it]){
+                f_dfs(it,visited,list,adj);
+            }
+        }
+    }
+    public ArrayList<Integer> dfs(ArrayList<ArrayList<Integer>> adj) {
+        int v = adj.size();
+        
+       ArrayList<Integer> list = new ArrayList<>();
+        boolean [] visited = new boolean [v];
+        int start = 0;
+        
+        f_dfs(start,visited,list,adj);
+        return list;
+        
+    }
+}
