@@ -1,0 +1,63 @@
+// bfs
+
+
+// hume dfs isliye use nhi kiya kyuki agr hum dfs use krenge toh dfs sbke uper jaega aur time jada lega 
+// as hume mininum time chahiye so hum bfs use kr rhe level wise 
+// as req min time
+
+class Pair{
+    int row;
+    int col;
+    int time;
+    Pair(int row,int col,int time){
+        this.row = row;
+        this.col = col;
+        this.time = time;
+    }
+}
+class Solution {
+    public int orangesRotting(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        Queue<Pair> q = new LinkedList<>();
+        int countFreshOranges = 0;
+         
+        // counting the fresh oranges and if rotten then adding into q 
+        for(int i = 0;i<n;i++){
+            for(int j = 0;j<m;j++){
+                if(grid[i][j] == 1)countFreshOranges++;
+                if(grid[i][j] == 2){
+                    q.offer(new Pair(i,j,0));
+                }
+            }
+        }
+
+        // all four direction
+        int [] delRow = {-1,0,1,0};
+        int [] delCol = {0,1,0,-1};
+        int timeTaken = 0;
+        int count = 0;
+        while(!q.isEmpty()){
+            Pair node = q.poll();
+            int row = node.row;
+            int col = node.col;
+            int time = node.time;
+
+            timeTaken = Math.max(timeTaken,time); // jaise jaise time bdega hum usse update krte rhhege aur joh last vala orange hoga toh usse kitna time lga rot hone mai
+
+            // moving the all four directions
+            for(int i = 0;i<4;i++){
+                int nrow = row + delRow[i];
+                int ncol = col + delCol[i];
+                
+                if((nrow >= 0 && nrow < n && ncol >= 0 && ncol < m) && grid[nrow][ncol] == 1  ){
+                    grid[nrow][ncol] = 2;
+                    count++;
+                    q.offer(new Pair(nrow,ncol,time+1));
+                }
+            }
+        }
+        if(count == countFreshOranges)return timeTaken;
+        return -1;
+    }
+}
