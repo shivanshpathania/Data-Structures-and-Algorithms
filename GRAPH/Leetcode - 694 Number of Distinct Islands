@@ -1,0 +1,45 @@
+// GFG
+
+// User function Template for Java
+
+class Solution {
+    public void dfs(int row,int col,int [][] grid,boolean [][] visited,ArrayList<String> list,int baseRow,int baseCol){
+        visited[row][col] = true;
+        String co_ordinates = (baseRow - row) + "-" + (baseCol - col);
+        list.add(co_ordinates);
+        int n = grid.length;
+        int m = grid[0].length;
+        
+        int [] delRow = {-1,0,1,0};
+        int [] delCol = {0,1,0,-1};
+        
+        for(int i = 0;i<4;i++){
+            int nrow = row + delRow[i];
+            int ncol = col + delCol[i];
+            
+            if(nrow >=0 && nrow < n && ncol >= 0 && ncol < m && grid[nrow][ncol] == 1 && !visited[nrow][ncol]){
+                dfs(nrow,ncol,grid,visited,list,baseRow,baseCol);
+            }
+        }
+    }
+    int countDistinctIslands(int[][] grid) {
+    int n = grid.length;
+    int m = grid[0].length;
+    
+    Set<ArrayList<String>> set = new HashSet<>();
+    
+    boolean [][] visited = new boolean[n][m];
+    
+    for(int i = 0;i<n;i++){
+        for(int j = 0;j<m;j++){
+            if(grid[i][j] == 1 && !visited[i][j]){
+                ArrayList<String> temp = new ArrayList<>();
+                dfs(i,j,grid,visited,temp,i,j);
+                set.add(temp);
+            }
+        }
+    }
+    return set.size();
+        
+    }
+}
