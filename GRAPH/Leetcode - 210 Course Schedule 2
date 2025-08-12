@@ -1,0 +1,43 @@
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+       ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for(int i = 0;i<numCourses;i++)adj.add(new ArrayList<>());
+
+        for(int [] row : prerequisites){
+            adj.get(row[1]).add(row[0]);
+        }
+
+        // making the indegree
+        int [] indegree = new int[numCourses];
+        for(int i = 0;i<numCourses;i++){
+            for(int ele : adj.get(i)){
+                indegree[ele]++;
+            }
+        }
+        Queue<Integer> q = new LinkedList<>();
+        for(int i = 0;i<numCourses;i++){
+            if(indegree[i] == 0){
+                q.offer(i);
+            }
+        }
+        int [] topo = new int[numCourses];
+        int i = 0;
+        int count = 0;
+        while(!q.isEmpty()){
+            int node = q.poll();
+            topo[i++] = node;
+            count++;
+            if(count == numCourses)break;
+            for(int ele : adj.get(node)){
+                indegree[ele]--;
+                if(indegree[ele] == 0){
+                    q.offer(ele);
+                }
+            }
+        }
+        if(count == numCourses){
+            return topo;
+        }
+        return new int[]{};
+    }
+}
