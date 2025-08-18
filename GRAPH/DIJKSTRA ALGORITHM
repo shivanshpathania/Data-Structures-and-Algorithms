@@ -1,0 +1,71 @@
+// USING PRIORITY QUEUE COMPARING THE SHORTER DISTANCE
+
+class Pair implements Comparable<Pair>{
+    int node;
+    int distance;
+    Pair(int node,int distance){
+        this.node = node;
+        this.distance = distance;
+    }
+    public int compareTo(Pair other){
+        return this.distance - other.distance;
+    }
+}
+class Solution {
+    public int[] dijkstra(int V, int[][] edges, int src) {
+        // code here
+        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
+        for(int i = 0;i<V;i++){
+            adj.add(new ArrayList<>());
+        }
+        
+        for(int [] edge : edges){
+            int u = edge[0];
+            int v = edge[1];
+            int wt = edge[2];
+            adj.get(u).add(new Pair(v,wt));
+            adj.get(v).add(new Pair(u,wt));
+        }
+        
+        int [] dist = new int[V];
+        Arrays.fill(dist,Integer.MAX_VALUE);
+        dist[src] = 0;
+        PriorityQueue<Pair> q = new PriorityQueue<>();
+        q.offer(new Pair(src,0));
+        
+        while(!q.isEmpty()){
+            int node = q.peek().node;
+            int distance = q.peek().distance;
+            q.poll();
+            
+            for (Pair edge : adj.get(node)) {
+                int neighbour = edge.node;
+                int weight = edge.distance;
+
+                int newDistance = d + weight;
+
+                if (newDistance < dist[neighbour]) {
+                    dist[neighbour] = newDistance;
+                    q.offer(new Pair(neighbour, newDistance));
+                }
+            }
+
+        }
+        return dist;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
