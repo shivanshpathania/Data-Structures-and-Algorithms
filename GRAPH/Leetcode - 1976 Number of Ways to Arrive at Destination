@@ -1,0 +1,56 @@
+class Pair implements Comparable<Pair>{
+    int first;
+    long second;
+    Pair(int first,long second){
+        this.first = first;
+        this.second = second;
+    }
+
+    public int compareTo(Pair other){
+        return Long.compare(this.second, other.second);
+    }
+}
+
+class Solution {
+    public int countPaths(int n, int[][] roads) {
+        ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
+        for(int i = 0;i<n;i++) adj.add(new ArrayList<>());
+
+        for(int [] edge : roads){
+            int u = edge[0];
+            int v = edge[1];
+            int time = edge[2];
+            adj.get(u).add(new Pair(v,time));
+            adj.get(v).add(new Pair(u,time));
+        }
+
+        PriorityQueue<Pair> q = new PriorityQueue<>();
+        q.offer(new Pair(0,0));
+        long [] dist = new long[n];
+        int [] ways = new int[n];
+        Arrays.fill(dist, Long.MAX_VALUE);
+
+        dist[0] = 0;
+        ways[0] = 1;
+        int MOD = (int)(1e9+7);
+        while(!q.isEmpty()){
+            int node = q.peek().first;
+            long time = q.peek().second;
+            q.remove();
+
+            for(Pair neigh : adj.get(node)){
+                int adjNode = neigh.first;
+                long adjTime = neigh.second;
+
+                if(time + adjTime < dist[adjNode]){
+                    dist[adjNode] = time + adjTime;
+                    ways[adjNode] = ways[node]; // first time visiting 
+                    q.offer(new Pair(adjNode,time+adjTime));
+                }else if(time + adjTime == dist[adjNode]){ // dist is same now can update the ways 
+                   ways[adjNode] =  (ways[adjNode] + ways[node]) % MOD;
+                }
+            }
+        }
+        return ways[n-1] % MOD ;
+    }
+}
