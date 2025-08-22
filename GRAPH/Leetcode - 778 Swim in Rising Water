@@ -1,0 +1,47 @@
+class Triplet implements Comparable<Triplet>{
+    int first;
+    int second;
+    int third;
+    Triplet(int first,int second,int third){
+        this.first = first;
+        this.second = second;
+        this.third = third;
+    }
+    public int compareTo(Triplet other){
+        return this.third - other.third;
+    }
+}
+class Solution {
+    public int swimInWater(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+
+        int [] delRow = {-1,0,1,0};
+        int [] delCol = {0,1,0,-1};
+
+        boolean [][] visited = new boolean[n][m];
+        visited[0][0] = true;
+
+        PriorityQueue<Triplet> q = new PriorityQueue<>();
+        q.offer(new Triplet(0,0,grid[0][0]));
+        int ans = 0;
+        while(!q.isEmpty()){
+            int row = q.peek().first;
+            int col = q.peek().second;
+            int time = q.peek().third;
+            q.poll();
+            ans = Math.max(ans,time);
+            if(row == n-1 && col == m-1)return ans;
+            for(int i = 0;i<4;i++){
+                int nrow  = row + delRow[i];
+                int ncol = col + delCol[i];
+                if(nrow >= 0 && nrow < n && ncol>=0 && ncol < m && !visited[nrow][ncol]){
+                    visited[nrow][ncol] = true;
+                    int newTime = grid[nrow][ncol];
+                    q.offer(new Triplet(nrow,ncol,newTime));
+                }
+            }
+        }
+        return -1;
+    }
+}
