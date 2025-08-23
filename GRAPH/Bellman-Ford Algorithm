@@ -1,0 +1,47 @@
+// bellmon-ford is an algorithm like dike-stra for finding shortest path between src to destination as it also checks for negative values but dijkstra does not check 
+// the key point for bellman is that it also checks for negative cycle 
+// so the first step is that we have to traverse each edge and mark it has shortest path and we run for it N-1 times
+
+// why n-1 time ? so while relaxing the edges the order of the edges mmay be in any  order as it depends on each other so for worst case the relaxing edge may be in the last so this the reason
+// we have to do for n-1 time
+
+
+// how to check for negative cycle ?
+// as we have stated that we run loop for n-1 times for relaxing the edges and covers all the shortest path 
+// but if after n-1 times still we get shorter it means there is uncertainty and value become smaller again and again
+// so this conclude that graph has negative cycle
+
+
+class Solution {
+    public int[] bellmanFord(int V, int[][] edges, int src) {
+        int max = (int)1e8;
+        int [] dist = new int [V];
+        Arrays.fill(dist,max);
+        
+        dist[src] = 0;
+        
+        for(int i = 0;i<V-1;i++){
+            for(int [] edge : edges){
+                int u = edge[0];
+                int v = edge[1];
+                int wt = edge[2];
+                
+                if( dist[u]!=max && dist[u] + wt < dist[v]){
+                    dist[v] = dist[u] + wt;
+                }
+            }
+            
+        }
+        for(int [] edge : edges){
+                int u = edge[0];
+                int v = edge[1];
+                int wt = edge[2];
+                
+                if(dist[u]!=max && dist[u] + wt < dist[v]){
+                    return new int []{-1};
+                }
+            }
+        return dist;
+        
+    }
+}
