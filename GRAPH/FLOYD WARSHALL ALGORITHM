@@ -1,0 +1,22 @@
+class Solution {
+    public void floydWarshall(int[][] dist) {
+        int n = dist.length;
+        int inf = 100000000;
+        
+        for(int k = 0;k<n;k++){  // via route
+            for(int i = 0;i<n;i++){
+                for(int j = 0;j<n;j++){
+                    if(dist[i][k] != inf && dist[k][j] != inf){
+                        dist[i][j] = Math.min(dist[i][j] ,
+                        dist[i][k] + dist[k][j]);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+// now the question is what if we have to check the graph contains negative cycle
+ans : if the graph contain negative cycle then dist[i][j] will not be zero and gets into negative number as agoing as decresing 
+// so conclusion is that when grpah contain negative cycle diagonals ele become negative 
