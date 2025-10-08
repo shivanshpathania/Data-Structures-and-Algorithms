@@ -1,0 +1,33 @@
+/*
+in this problem we have an array price of length n 
+we have to cut them in some pieces such that we can maximise the sum
+no we think backwards that we have. to collect upto n peices such that the result is maximum
+means from 0 to n such that maxi 
+
+now so f(n-1,n,arr)
+that we do and we keep doing 
+remember n-1 is length n 
+so we just keep idx + 1 as length of rod
+*/
+
+class Solution {
+    public int f(int idx,int target,int [] arr,int [][] dp){
+        if(idx == 0){
+            return arr[0] * target;// rem length price
+        }
+        if(dp[idx][target]!=-1)return dp[idx][target];
+        int notCut = f(idx-1,target,arr,dp);
+        int cut = Integer.MIN_VALUE;
+        int rodLength = idx + 1;
+        if(rodLength <= target){
+            cut  = arr[idx] + f(idx,target - rodLength,arr,dp);
+        }
+        return dp[idx][target] = Math.max(cut,notCut);
+    }
+    public int cutRod(int[] price) {
+        int n = price.length;
+        int [][] dp = new int[n][n+1];
+        for(int [] row : dp)Arrays.fill(row,-1);
+        return f(n-1,n,price,dp);
+    }
+}
